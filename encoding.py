@@ -1,1 +1,9 @@
-# file to perform encoding of images
+# libraries imported
+import os
+import face_recognition
+
+
+
+
+
+
