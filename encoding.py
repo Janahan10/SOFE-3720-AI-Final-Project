@@ -1,0 +1,1 @@
+# file to perform encoding of images
