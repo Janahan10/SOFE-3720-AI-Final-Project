@@ -43,12 +43,21 @@ def main():
             if matches[best_match_index]:
                 name = known_names[best_match_index]
 
-            # Draw a rectangle around each face in frame
-            cv2.rectangle(frame, (left, top), (right,bottom), (0,0, 255), 1)
+            # Check if known or unknown
+            if name is "Unknown":
+                # Draw a rectangle around each face in frame
+                cv2.rectangle(frame, (left, top), (right,bottom), (0,0, 255), 1)
 
-            cv2.rectangle(frame, (left, bottom - 35), (right, bottom), (0, 0, 255), -1)
-            font = cv2.FONT_HERSHEY_DUPLEX
-            cv2.putText(frame, name, (left + 6, bottom - 6), font, 0.5, (255, 255, 255), 1)
+                cv2.rectangle(frame, (left, bottom - 35), (right, bottom), (0, 0, 255), -1)
+                font = cv2.FONT_HERSHEY_DUPLEX
+                cv2.putText(frame, name, (left + 6, bottom - 6), font, 0.5, (255, 255, 255), 1)
+            else:
+                # Draw a rectangle around each face in frame
+                cv2.rectangle(frame, (left, top), (right,bottom), (0, 128, 0), 1)
+
+                cv2.rectangle(frame, (left, bottom - 35), (right, bottom), (0, 128, 0), -1)
+                font = cv2.FONT_HERSHEY_DUPLEX
+                cv2.putText(frame, name, (left + 6, bottom - 6), font, 0.5, (255, 255, 255), 1)
 
         # proc_frame = not proc_frame
 
