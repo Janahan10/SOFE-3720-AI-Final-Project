@@ -7,15 +7,25 @@ import face_recognition
 from encoding import read_known_names, read_known_files
 
 def main():
-    know_users_path = "assets/imgs/users/"
+    known_users_path = "assets/imgs/users/"
     known_enc = []
     known_names = []
     known_files = []
-    face_locations = []
+    # face_locations = []
 
     # train the faces
-    read_known_files(know_users_path, known_files)
-    read_known_names(know_users_path, known_files, known_names, known_enc)
+    read_known_files(known_users_path, known_files)
+    read_known_names(known_users_path, known_files, known_names, known_enc)
+
+    # live scan mode
+    live_scan(known_enc, known_names)
+
+    quit()
+
+def live_scan(known_enc, known_names):
+
+    # face locations array
+    face_locations=[]
 
     # start video capture
     vid_cap = cv2.VideoCapture(0)
@@ -59,26 +69,8 @@ def main():
                 font = cv2.FONT_HERSHEY_DUPLEX
                 cv2.putText(frame, name, (left + 6, bottom - 6), font, 0.5, (255, 255, 255), 1)
 
-        # proc_frame = not proc_frame
-
-        '''
-        # display results
-        for (top, right, bottom, left) in face_locations:
-            # top *= 4
-            # right *= 4
-            # bottom *= 4
-            # left *= 4
-        
-            # Draw a rectangle around teach face in frame
-            cv2.rectangle(frame, (left, top), (right,bottom), (0,0, 255), 1)
-
-            cv2.rectangle(frame, (left, bottom - 35), (right, bottom), (0, 0, 255), -1)
-            font = cv2.FONT_HERSHEY_DUPLEX
-            cv2.putText(frame, name, (left + 6, bottom - 6), font, 1.0, (255, 255, 255), 1)
-        '''
-
         # Display the resulting image
-        cv2.imshow('Video', frame)
+        cv2.imshow('Live Scan', frame)
 
         # Hit 'q' on the keyboard to quit!
         if cv2.waitKey(1) & 0xFF == ord('q'):
@@ -87,7 +79,7 @@ def main():
     # end capture and close windows
     vid_cap.release()
     cv2.destroyAllWindows()
-    quit()
+
 
 if __name__ == '__main__':
     main()
