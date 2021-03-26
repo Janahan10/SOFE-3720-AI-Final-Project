@@ -7,8 +7,8 @@ import face_recognition
 from encoding import read_known_user, get_image_encodings
 
 def main():
-    known_users_path = "assets/imgs/users/"
-    input_path = "assets/imgs/inputs/"
+    known_users_path = "appdata/imgs/users/"
+    input_path = "appdata/imgs/inputs/"
     # known_enc = []
     known_users = []
     # known_files = []

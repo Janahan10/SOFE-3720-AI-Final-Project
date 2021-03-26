@@ -4,13 +4,13 @@ import re
 import face_recognition
 import csv
 
-known_users_path = "assets/imgs/users/"
+known_users_path = "appdata/imgs/users/"
 known_encodings = []
 known_users = []
 
 
 def read_known_user(known_users):
-    with open('users.txt') as csv_file:
+    with open('appdata/users.txt') as csv_file:
         file_reader = csv.reader(csv_file, delimiter=',')
 
         for line in file_reader:
