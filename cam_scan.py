@@ -49,40 +49,10 @@ def live_scan(known_enc, known_users):
         rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
         # Find faces in the frame and get encodings
-        face_locations = face_recognition.face_locations(rgb_frame)
-        shown_enc = face_recognition.face_encodings(rgb_frame, face_locations)
+        face_locations, shown_enc = facial_detection(rgb_frame)
 
-        # compare all face encodings in frame
-        for (top, right, bottom, left), face_enc in zip(face_locations, shown_enc):
-            matches = face_recognition.compare_faces(known_enc, face_enc)
-            name = "Unknown"
-
-            face_distances = face_recognition.face_distance(known_enc, face_enc)
-            best_match_index = np.argmin(face_distances)
-            if matches[best_match_index]:
-                name = known_users[best_match_index][0]
-                sex = known_users[best_match_index][1]
-                occ = known_users[best_match_index][2]
-                bday = known_users[best_match_index][3]
-
-            # Check if known or unknown
-            if name is "Unknown":
-                # Draw a rectangle around each face in img
-                cv2.rectangle(frame, (left, top), (right,bottom), (0,0, 255), 1)
-
-                cv2.rectangle(frame, (left, bottom + 40), (right, bottom), (0, 0, 255), -1)
-                font = cv2.FONT_HERSHEY_DUPLEX
-                cv2.putText(frame, name, (left + 6, bottom + 17), font, 0.5, (255, 255, 255), 1)
-            else:
-                # Draw a rectangle around each face in img
-                cv2.rectangle(frame, (left, top), (right,bottom), (0, 128, 0), 1)
-
-                cv2.rectangle(frame, (left, bottom + 80), (right, bottom), (0, 128, 0), -1)
-                font = cv2.FONT_HERSHEY_DUPLEX
-                cv2.putText(frame, name, (left + 6, bottom + 17), font, 0.5, (255, 255, 255), 1)
-                cv2.putText(frame, sex, (left + 6, bottom + 34), font, 0.5, (255, 255, 255), 1)
-                cv2.putText(frame, occ, (left + 6, bottom + 51), font, 0.5, (255, 255, 255), 1)
-                cv2.putText(frame, bday, (left + 6, bottom + 68), font, 0.5, (255, 255, 255), 1)
+        # match the face to known faces and display information
+        match_display(face_locations, shown_enc, known_enc, known_users, frame)
 
         # Display the resulting image
         cv2.imshow('Live Scan', frame)
@@ -103,8 +73,7 @@ def scan_input(known_enc, known_users, input_path, input):
     img = cv2.imread(img_path, cv2.IMREAD_COLOR)
 
     # Find faces in the frame and get encodings
-    face_locations = face_recognition.face_locations(input_img)
-    shown_enc = face_recognition.face_encodings(input_img, face_locations)
+    face_locations, shown_enc = facial_detection(input_img)
 
     # make a named window
     cv2.namedWindow('Scanning Input Image', cv2.WINDOW_AUTOSIZE)
@@ -112,7 +81,28 @@ def scan_input(known_enc, known_users, input_path, input):
     # Continuous loop
     while cv2.getWindowProperty('Scanning Input Image', 0) >= 0:
         
-        # compare all face encodings in img
+        # match the face to known faces and display information
+        match_display(face_locations, shown_enc, known_enc, known_users, img)
+
+        # Display the resulting image
+        cv2.imshow('Scanning Input Image', img)
+
+        # Hit 'q' on the keyboard to quit!
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
+    
+    # close all windows
+    cv2.destroyAllWindows()
+
+def facial_detection(image):
+    coordinates = face_recognition.face_locations(image)
+    encodings = face_recognition.face_encodings(image, coordinates)
+
+    return coordinates, encodings
+
+def match_display(face_locations, shown_enc, known_enc, known_users, img):
+
+    # compare all face encodings in img
         for (top, right, bottom, left), face_enc in zip(face_locations, shown_enc):
             matches = face_recognition.compare_faces(known_enc, face_enc)
             name = "Unknown"
@@ -143,16 +133,6 @@ def scan_input(known_enc, known_users, input_path, input):
                 cv2.putText(img, sex, (left + 6, bottom + 34), font, 0.5, (255, 255, 255), 1)
                 cv2.putText(img, occ, (left + 6, bottom + 51), font, 0.5, (255, 255, 255), 1)
                 cv2.putText(img, bday, (left + 6, bottom + 68), font, 0.5, (255, 255, 255), 1)
-
-        # Display the resulting image
-        cv2.imshow('Scanning Input Image', img)
-
-        # Hit 'q' on the keyboard to quit!
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
-    
-    # close all windows
-    cv2.destroyAllWindows()
 
 if __name__ == '__main__':
     main()
