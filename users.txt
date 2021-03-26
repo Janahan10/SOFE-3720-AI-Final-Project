@@ -1,0 +1,4 @@
+"Jeff Bezos","Male","CEO","January 12, 1964"
+"Bill Gates","Male","CEO","October 28, 1955"
+"Satya Nadella","Male","CEO","August 19, 1967"
+"Dara Khosrowshahi","Male","CEO","May 28, 1969"
