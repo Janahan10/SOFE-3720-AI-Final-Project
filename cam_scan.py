@@ -14,14 +14,30 @@ def main():
     # known_files = []
 
     # test image
-    input = "user-one.jpg"
+    # input = "user-one.jpg"
 
     # train the faces
     read_known_user(known_users)
     known_enc = get_image_encodings(known_users_path)
 
+    # Ask user if they want a live scan or scan from an image
+    choice = input("Would you like to scan live (type \"L\") or from an image (type \"I\")?: ")
+
+    if choice.lower() == "L".lower():
+        # live scan mode
+        live_scan(known_enc, known_users)
+    elif choice.lower() == "I".lower():
+        # get the name of the file
+        inp = input("Enter the file name: ")
+
+        # input mode
+        scan_input(known_enc, known_users, input_path, inp)
+    else:
+        print("Invalid option")
+    
+
     # live scan mode
-    live_scan(known_enc, known_users)
+    # live_scan(known_enc, known_users)
 
     # input mode
     # scan_input(known_enc, known_users, input_path, input)
