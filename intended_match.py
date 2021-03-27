@@ -2,15 +2,17 @@
 import os
 import re
 import cv2
-import numpy as np
 import face_recognition
 from encoding import read_known_user, get_image_encodings
+import numpy as np
+import matplotlib.pyplot as plt
 
 known_users_path = "appdata/imgs/users/"
 input_path = "appdata/imgs/known-users/"
 known_users = []
 num_tests = 5
-test_iter = []
+test_iter_correct = []
+test_iter_incorrect = []
 
 # train the faces
 read_known_user(known_users)
@@ -60,10 +62,35 @@ for i in range(num_tests):
                     # increment correct counter for not matching
                     correct++
     
-    # add number of correct and incorrect matches to test_iter
-    test_iter.append([correct, incorrect])
+    # add number of correct and incorrect matches to test_iter arrays
+    test_iter_correct.append(correct)
+    test_iter_incorrect.append(incorrect)
 
+# create plot
+fig, ax = plt.subplots()
+index = np.arange(num_tests)
+bar_width = 0.35
+opacity = 0.8
 
+# create correct and incorrect rectangles
+rects1 = plt.bar(index, test_iter_correct, bar_width,
+alpha=opacity,
+color='g',
+label='Correct matches')
 
-            
-            
+rects2 = plt.bar(index + bar_width, test_iter_incorrect, bar_width,
+alpha=opacity,
+color='r',
+label='Incorrect matches')
+
+# labels
+plt.xlabel('Test iteration')
+plt.ylabel('Number of matches')
+plt.title('Correct vs Incorrect matches of existing users')
+plt.xticks(index + bar_width, ('1', '2', '3', '4'))
+plt.legend()
+
+# make plot
+plt.tight_layout()
+plt.savefig('intended_matches.jpg', dpi=400)
+plt.show()
