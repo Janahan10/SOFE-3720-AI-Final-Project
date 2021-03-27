@@ -29,7 +29,7 @@ def get_image_encodings(known_users_path):
         index = int(file_name[:-4])
         enc_dict[index] = face_recognition.face_encodings(face)[0]
     
-    known_encodings = [enc_dict[i] for i in range(len(enc_dict))]
+    known_encodings = [i in enc_dict for i in range(len(enc_dict))]
 
     return known_encodings
 
