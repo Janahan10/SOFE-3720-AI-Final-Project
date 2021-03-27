@@ -4,6 +4,7 @@ import re
 import cv2
 import face_recognition
 from encoding import read_known_user, get_image_encodings
+from cam_scan import facial_detection, match
 import numpy as np
 import matplotlib.pyplot as plt
 
