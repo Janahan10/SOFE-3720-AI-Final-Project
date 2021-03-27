@@ -87,7 +87,7 @@ label='Incorrect matches')
 plt.xlabel('Test iteration')
 plt.ylabel('Number of matches')
 plt.title('Correct vs Incorrect matches of existing users')
-plt.xticks(index + bar_width, ('1', '2', '3', '4'))
+plt.xticks(index + bar_width, ('1', '2', '3', '4', '5'))
 plt.legend()
 
 # make plot
