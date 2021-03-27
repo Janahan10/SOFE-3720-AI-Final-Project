@@ -128,6 +128,7 @@ def match(shown_enc, known_enc, known_users):
     sex = "Unknown"
     occ = "Unknown"
     bday = "Unknown"
+    num_faces = len(shown_enc)
 
     # check if list is empty
     if len(shown_enc) != 0:
@@ -147,7 +148,7 @@ def match(shown_enc, known_enc, known_users):
                 occ = known_users[best_match_index][2]
                 bday = known_users[best_match_index][3]
 
-            return [name, sex, occ, bday]
+            return [name, sex, occ, bday, num_faces]
 
             # # Check if known or unknown
             # if name is "Unknown":
@@ -168,7 +169,7 @@ def match(shown_enc, known_enc, known_users):
             #     cv2.putText(img, occ, (left + 6, bottom + 51), font, 0.5, (255, 255, 255), 1)
             #     cv2.putText(img, bday, (left + 6, bottom + 68), font, 0.5, (255, 255, 255), 1)
     else:
-        return [name, sex, occ, bday]
+        return [name, sex, occ, bday, num_faces]
 
 def display(face_locations, name, sex, occ, bday, img):
     
