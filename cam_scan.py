@@ -6,6 +6,7 @@ import numpy as np
 import face_recognition
 from encoding import read_known_user, get_image_encodings
 
+
 def main():
     known_users_path = "appdata/imgs/users/"
     input_path = "appdata/imgs/inputs/"
@@ -44,6 +45,7 @@ def main():
 
     quit()
 
+
 def live_scan(known_enc, known_users):
 
     # face locations array
@@ -81,6 +83,7 @@ def live_scan(known_enc, known_users):
     vid_cap.release()
     cv2.destroyAllWindows()
 
+
 def scan_input(known_enc, known_users, input_path, input):
 
     # load the input image
@@ -110,11 +113,13 @@ def scan_input(known_enc, known_users, input_path, input):
     # close all windows
     cv2.destroyAllWindows()
 
+
 def facial_detection(image):
     coordinates = face_recognition.face_locations(image)
     encodings = face_recognition.face_encodings(image, coordinates)
 
     return coordinates, encodings
+
 
 def match_display(face_locations, shown_enc, known_enc, known_users, img):
 
@@ -132,7 +137,7 @@ def match_display(face_locations, shown_enc, known_enc, known_users, img):
                 bday = known_users[best_match_index][3]
 
             # Check if known or unknown
-            if name is "Unknown":
+            if name == "Unknown":
                 # Draw a rectangle around each face in img
                 cv2.rectangle(img, (left, top), (right,bottom), (0,0, 255), 1)
 
@@ -150,6 +155,6 @@ def match_display(face_locations, shown_enc, known_enc, known_users, img):
                 cv2.putText(img, occ, (left + 6, bottom + 51), font, 0.5, (255, 255, 255), 1)
                 cv2.putText(img, bday, (left + 6, bottom + 68), font, 0.5, (255, 255, 255), 1)
 
+
 if __name__ == '__main__':
     main()
-    
