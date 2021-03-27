@@ -40,7 +40,7 @@ for i in range(num_tests):
             info = match(shown_enc, known_enc, known_users)
 
             # get the name of the person in photo from file name
-            name_in_file = img[:-5]
+            name_in_file = img[:-6]
 
             # compare the name of current user and the name in the image
             if known_user[i][0] == name_in_file:
@@ -48,19 +48,19 @@ for i in range(num_tests):
 
                 if known_user[i][0] == info[0]:
                     # increment correct counter for correct match
-                    correct++
+                    correct += 1
                 else:
                     # increment incorrect counter for not matching properly
-                    incorrect++
+                    incorrect += 1
             else:
                 # if different then check if match gave unknown or different match
 
                 if known_user[i][0] == info[0]:
                     # increment incorrect counter for incorrect match
-                    incorrect++
+                    incorrect += 1
                 else:
                     # increment correct counter for not matching
-                    correct++
+                    correct += 1
     
     # add number of correct and incorrect matches to test_iter arrays
     test_iter_correct.append(correct)

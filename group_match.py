@@ -40,10 +40,10 @@ for i in range(num_tests):
         # check if number of faces matched is equal to intended number
         if num_faces == info[4]:
             # increment all_m counter
-            all_m++
+            all_m += 1
         else:
             # increment not_all_m counter
-            not_all_m++
+            not_all_m += 1
     
     # add number of all and not all matched to test_iter arrays
     test_iter_all.append(all_m)
