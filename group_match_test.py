@@ -9,18 +9,22 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 known_users_path = "appdata/imgs/users/"
-input_path = "appdata/imgs/grouped/"
+input_path = "appdata/imgs/groups/"
 known_users = []
 num_tests = 5
 test_iter_all = []
 test_iter_not_all = []
-num_faces = 36
+num_faces = 25
 
 # train the faces
+print("Training and encoding faces...")
 read_known_user(known_users)
 known_enc = get_image_encodings(known_users_path)
+print("Finished encoding")
 
 for i in range(num_tests):
+
+    print("Beginning test %s" % (i + 1))
 
     # make counters for when all faces are matched and not
     all_m = 0
@@ -30,12 +34,16 @@ for i in range(num_tests):
     for img in os.listdir(input_path):
 
         # load the input image
+        print("Loading image...")
         input_img = face_recognition.load_image_file(input_path + img)
+        print("Image loaded")
 
         # find face in frame and get encodings
+        print("Processing image...")
         face_locations, shown_enc = facial_detection(input_img)
 
         # match the faces to known faces
+        print("Comparing faces...")
         info = match(shown_enc, known_enc, known_users)
 
         # check if number of faces matched is equal to intended number
@@ -45,11 +53,15 @@ for i in range(num_tests):
         else:
             # increment not_all_m counter
             not_all_m += 1
+            print("Given number of faces = %s" % info[4])
+        
+        print("Comparing done")
     
     # add number of all and not all matched to test_iter arrays
     test_iter_all.append(all_m)
     test_iter_not_all.append(not_all_m)
 
+print("Making bar chart...")
 # create plot
 fig, ax = plt.subplots()
 index = np.arange(num_tests)
@@ -65,7 +77,7 @@ label='All faces matched')
 rects2 = plt.bar(index + bar_width, test_iter_not_all, bar_width,
 alpha=opacity,
 color='r',
-label='Not all faces matched')
+label='Missing some faces')
 
 # labels
 plt.xlabel('Test iteration')
@@ -76,5 +88,5 @@ plt.legend()
 
 # make plot
 plt.tight_layout()
-plt.savefig('group_match.jpg', dpi=400)
+plt.savefig('group_match_test.jpg', dpi=400)
 plt.show()

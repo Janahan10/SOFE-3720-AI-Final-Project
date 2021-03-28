@@ -62,7 +62,7 @@ for i in range(num_tests):
             incorrect += 1
             print("Intended name: " + name_in_file)
             print("File name: " + img)
-            print("Given name: " + info[0])
+            print("Given name: %s" % info[0])
 
         print("Comparing done")
     
