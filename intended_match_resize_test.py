@@ -97,5 +97,5 @@ plt.legend()
 
 # make plot
 plt.tight_layout()
-plt.savefig('intended_matches_resize_test.jpg', dpi=400)
+plt.savefig('testdata/intended_matches_resize_test.jpg', dpi=400)
 plt.show()

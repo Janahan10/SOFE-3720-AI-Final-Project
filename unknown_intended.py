@@ -64,5 +64,5 @@ plt.xticks(index + bar_width, ('1', '2', '3', '4', '5'))
 plt.legend()
 
 #plt.tight_layout()
-plt.savefig('unknown_matches.jpg', dpi=400)
+plt.savefig('testdata/unknown_matches.jpg', dpi=400)
 plt.show()
