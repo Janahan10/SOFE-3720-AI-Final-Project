@@ -73,7 +73,7 @@ def live_scan(known_enc, known_users):
         info = match(shown_enc, known_enc, known_users)
 
         # display the information
-        display(face_locations, info[0], info[1], info[2], info[3], frame)
+        display(face_locations, info[0], info[1], info[2], info[3], frame, 1)
 
         # Display the resulting image
         cv2.imshow('Live Scan', frame)
@@ -107,7 +107,7 @@ def scan_input(known_enc, known_users, input_path, input):
         info = match(shown_enc, known_enc, known_users)
 
         # display the information
-        display(face_locations, info[0], info[1], info[2], info[3], img)
+        display(face_locations, info[0], info[1], info[2], info[3], img, 1)
 
         # Display the resulting image
         cv2.imshow('Scanning Input Image', img)
@@ -175,7 +175,7 @@ def match(shown_enc, known_enc, known_users):
     else:
         return [name, sex, occ, bday, num_faces]
 
-def display(face_locations, name, sex, occ, bday, img):
+def display(face_locations, name, sex, occ, bday, img, ratio):
     
     # check if list is empty
     if len(face_locations) != 0:
@@ -191,6 +191,11 @@ def display(face_locations, name, sex, occ, bday, img):
             #     sex = known_users[best_match_index][1]
             #     occ = known_users[best_match_index][2]
             #     bday = known_users[best_match_index][3]
+
+            left = int(left * ratio)
+            right = int(right * ratio)
+            top = int(top * ratio)
+            bottom = int(bottom * ratio)
 
             # Check if known or unknown
             if name == "Unknown":
