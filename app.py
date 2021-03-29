@@ -51,7 +51,7 @@ def main():
     ]
 
     # Create the window and show it without the plot
-    window = sg.Window("Facial Recognition System", layout, location=(800, 400))
+    window = sg.Window("Facial Recognition System", layout, location=(0, 0), resizable=True)
 
     cap = cv2.VideoCapture(0)
 
@@ -62,25 +62,10 @@ def main():
         
         if values["-LIVE-"]:
             event = "None"
-            # read the video capture
-            _, frame = cap.read()
 
-            # resize the frame to be proc and convert to rgb
-            rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-
-            # Find faces in the frame and get encodings
-            face_locations, shown_enc = facial_detection(rgb_frame)
-
-            # match the face to known faces
-            info = match(shown_enc, known_enc, known_users)
-
-            # display the information
-            display(face_locations, info[0], info[1], info[2], info[3], frame, 1)
-
-            imgbytes = cv2.imencode(".png", frame)[1].tobytes()
+            imgbytes = live_scan(cap, known_enc, known_users)
             window["-IMAGE-"].update(data=imgbytes)
         elif event == "-FILE LIST-":  # A file was chosen from the listbox
-            # values["-LIVE-"] = False
 
             try:
                 img_path = os.path.join(
@@ -89,31 +74,8 @@ def main():
 
             except:
                 pass
-            
-            # load the input image
-            input_img = face_recognition.load_image_file(img_path)
-            img = cv2.imread(img_path, cv2.IMREAD_COLOR)
 
-            # Find faces in the frame and get encodings
-            face_locations, shown_enc = facial_detection(input_img)
-
-            # match the face to known faces
-            info = match(shown_enc, known_enc, known_users)
-
-            # display the information
-            max_size = 500
-            height = img.shape[0]
-            width = img.shape[1]
-            ratio = min(max_size/width, max_size/height)
-            if height >= width:
-                resized_img = imutils.resize(img, height=max_size)
-                img = resized_img
-            else:
-                resized_img = imutils.resize(img, width=max_size)
-                img = resized_img
-            display(face_locations, info[0], info[1], info[2], info[3], img, ratio)
-
-            imgbytes = cv2.imencode(".png", img)[1].tobytes()
+            imgbytes = img_scan(img_path, known_enc, known_users)
             window["-IMAGE-"].update(data=imgbytes)
 
         if event == "-FOLDER-":
@@ -138,4 +100,53 @@ def main():
 
     window.close()
 
-main()
+def img_scan(img_path, known_enc, known_users):
+    # load the input image
+    input_img = face_recognition.load_image_file(img_path)
+    img = cv2.imread(img_path, cv2.IMREAD_COLOR)
+
+    # Find faces in the frame and get encodings
+    face_locations, shown_enc = facial_detection(input_img)
+
+    # match the face to known faces
+    info = match(shown_enc, known_enc, known_users)
+
+    # display the information
+    max_size = 500
+    height = img.shape[0]
+    width = img.shape[1]
+    ratio = min(max_size/width, max_size/height)
+    if height >= width:
+        resized_img = imutils.resize(img, height=max_size)
+        img = resized_img
+    else:
+        resized_img = imutils.resize(img, width=max_size)
+        img = resized_img
+    display(face_locations, info[0], info[1], info[2], info[3], img, ratio)
+
+    imgbytes = cv2.imencode(".png", img)[1].tobytes()
+
+    return imgbytes
+
+def live_scan(cap, known_enc, known_users):
+    # read the video capture
+    _, frame = cap.read()
+
+    # resize the frame to be proc and convert to rgb
+    rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+
+    # Find faces in the frame and get encodings
+    face_locations, shown_enc = facial_detection(rgb_frame)
+
+    # match the face to known faces
+    info = match(shown_enc, known_enc, known_users)
+
+    # display the information
+    display(face_locations, info[0], info[1], info[2], info[3], frame, 1)
+
+    imgbytes = cv2.imencode(".png", frame)[1].tobytes()
+    return imgbytes
+
+if __name__ == '__main__':
+    main()
+    
