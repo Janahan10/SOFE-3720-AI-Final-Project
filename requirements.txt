@@ -5,3 +5,5 @@ face-recognition-models==0.3.0
 numpy==1.20.1
 opencv-python==4.5.1.48
 Pillow==8.1.2
+imutils==0.5.4
+PySimpleGUI==4.38.0
