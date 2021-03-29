@@ -40,6 +40,7 @@ for i in range(num_tests):
             unknown_unmatched += 1
         else:
             unknown_matched += 1
+            print("File name: " + img)
 
     test_iter_unmatched.append(unknown_unmatched)
     test_iter_matched.append(unknown_matched)

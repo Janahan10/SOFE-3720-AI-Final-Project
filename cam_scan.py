@@ -41,6 +41,8 @@ def main():
 
 def live_scan(known_enc, known_users):
 
+    print("Live processing...")
+
     # face locations array
     face_locations=[]
 
@@ -83,15 +85,20 @@ def live_scan(known_enc, known_users):
 def scan_input(known_enc, known_users, input_path, input):
 
     # load the input image
+    print("Loading image...")
     img_path = input_path + input
     input_img = face_recognition.load_image_file(img_path)
     img = cv2.imread(img_path, cv2.IMREAD_COLOR)
+    print("Image loaded")
 
     # Find faces in the frame and get encodings
+    print("Processing image...")
     face_locations, shown_enc = facial_detection(input_img)
 
     # make a named window
     cv2.namedWindow('Scanning Input Image', cv2.WINDOW_AUTOSIZE)
+
+    print("Comparing faces...")
 
     # Continuous loop
     while cv2.getWindowProperty('Scanning Input Image', 0) >= 0:

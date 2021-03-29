@@ -14,8 +14,10 @@ def main():
     known_users = []
 
     # train the faces
+    print("Training and encoding faces...")
     read_known_user(known_users)
     known_enc = get_image_encodings(known_users_path)
+    print("Finished encoding")
 
     sg.theme("DarkBlue")
 
@@ -102,14 +104,20 @@ def main():
 
 def img_scan(img_path, known_enc, known_users):
     # load the input image
+    print("Loading image...")
     input_img = face_recognition.load_image_file(img_path)
     img = cv2.imread(img_path, cv2.IMREAD_COLOR)
+    print("Image loaded")
 
     # Find faces in the frame and get encodings
+    print("Processing image...")
     face_locations, shown_enc = facial_detection(input_img)
 
     # match the face to known faces
+    print("Comparing faces...")
     info = match(shown_enc, known_enc, known_users)
+
+    print("Comparing done")
 
     # display the information
     max_size = 500
@@ -129,6 +137,9 @@ def img_scan(img_path, known_enc, known_users):
     return imgbytes
 
 def live_scan(cap, known_enc, known_users):
+
+    print("Live processing...")
+
     # read the video capture
     _, frame = cap.read()
 
