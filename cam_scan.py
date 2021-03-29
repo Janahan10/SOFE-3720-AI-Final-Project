@@ -35,18 +35,13 @@ def main():
         scan_input(known_enc, known_users, input_path, inp)
     else:
         print("Invalid option")
-    
-
-    # live scan mode
-    # live_scan(known_enc, known_users)
-
-    # input mode
-    # scan_input(known_enc, known_users, input_path, inp)
 
     quit()
 
 
 def live_scan(known_enc, known_users):
+
+    print("Live processing...")
 
     # face locations array
     face_locations=[]
@@ -73,7 +68,7 @@ def live_scan(known_enc, known_users):
         info = match(shown_enc, known_enc, known_users)
 
         # display the information
-        display(face_locations, info[0], info[1], info[2], info[3], frame)
+        display(face_locations, info[0], info[1], info[2], info[3], frame, 1)
 
         # Display the resulting image
         cv2.imshow('Live Scan', frame)
@@ -90,15 +85,20 @@ def live_scan(known_enc, known_users):
 def scan_input(known_enc, known_users, input_path, input):
 
     # load the input image
+    print("Loading image...")
     img_path = input_path + input
     input_img = face_recognition.load_image_file(img_path)
     img = cv2.imread(img_path, cv2.IMREAD_COLOR)
+    print("Image loaded")
 
     # Find faces in the frame and get encodings
+    print("Processing image...")
     face_locations, shown_enc = facial_detection(input_img)
 
     # make a named window
     cv2.namedWindow('Scanning Input Image', cv2.WINDOW_AUTOSIZE)
+
+    print("Comparing faces...")
 
     # Continuous loop
     while cv2.getWindowProperty('Scanning Input Image', 0) >= 0:
@@ -107,7 +107,7 @@ def scan_input(known_enc, known_users, input_path, input):
         info = match(shown_enc, known_enc, known_users)
 
         # display the information
-        display(face_locations, info[0], info[1], info[2], info[3], img)
+        display(face_locations, info[0], info[1], info[2], info[3], img, 1)
 
         # Display the resulting image
         cv2.imshow('Scanning Input Image', img)
@@ -154,43 +154,20 @@ def match(shown_enc, known_enc, known_users):
 
             return [name, sex, occ, bday, num_faces]
 
-            # # Check if known or unknown
-            # if name is "Unknown":
-            #     # Draw a rectangle around each face in img
-            #     cv2.rectangle(img, (left, top), (right,bottom), (0,0, 255), 1)
-
-            #     cv2.rectangle(img, (left, bottom + 40), (right, bottom), (0, 0, 255), -1)
-            #     font = cv2.FONT_HERSHEY_DUPLEX
-            #     cv2.putText(img, name, (left + 6, bottom + 17), font, 0.5, (255, 255, 255), 1)
-            # else:
-            #     # Draw a rectangle around each face in img
-            #     cv2.rectangle(img, (left, top), (right,bottom), (0, 128, 0), 1)
-
-            #     cv2.rectangle(img, (left, bottom + 80), (right, bottom), (0, 128, 0), -1)
-            #     font = cv2.FONT_HERSHEY_DUPLEX
-            #     cv2.putText(img, name, (left + 6, bottom + 17), font, 0.5, (255, 255, 255), 1)
-            #     cv2.putText(img, sex, (left + 6, bottom + 34), font, 0.5, (255, 255, 255), 1)
-            #     cv2.putText(img, occ, (left + 6, bottom + 51), font, 0.5, (255, 255, 255), 1)
-            #     cv2.putText(img, bday, (left + 6, bottom + 68), font, 0.5, (255, 255, 255), 1)
     else:
         return [name, sex, occ, bday, num_faces]
 
-def display(face_locations, name, sex, occ, bday, img):
+def display(face_locations, name, sex, occ, bday, img, ratio):
     
     # check if list is empty
     if len(face_locations) != 0:
         # compare all face encodings in img
         for (top, right, bottom, left) in face_locations:
-            # matches = face_recognition.compare_faces(known_enc, face_enc)
-            # name = "Unknown"
-
-            # face_distances = face_recognition.face_distance(known_enc, face_enc)
-            # best_match_index = np.argmin(face_distances)
-            # if matches[best_match_index]:
-            #     name = known_users[best_match_index][0]
-            #     sex = known_users[best_match_index][1]
-            #     occ = known_users[best_match_index][2]
-            #     bday = known_users[best_match_index][3]
+            
+            left = int(left * ratio)
+            right = int(right * ratio)
+            top = int(top * ratio)
+            bottom = int(bottom * ratio)
 
             # Check if known or unknown
             if name == "Unknown":

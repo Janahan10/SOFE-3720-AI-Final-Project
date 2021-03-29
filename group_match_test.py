@@ -54,6 +54,7 @@ for i in range(num_tests):
             # increment not_all_m counter
             not_all_m += 1
             print("Given number of faces = %s" % info[4])
+            print("File name: " + img)
         
         print("Comparing done")
     
