@@ -49,7 +49,7 @@ for i in range(num_tests):
 
         print("Comparing faces...")
         # match the faces to known faces
-        info = match(shown_enc, known_enc, known_users)
+        info = match(shown_enc[0], known_enc, known_users)
 
         # get the name of the person in photo from file name
         name_in_file = img[:-6]

@@ -34,7 +34,7 @@ for i in range(num_tests):
         face_locations, shown_enc = facial_detection(input_img)
 
         print("Comparing Faces...")
-        info = match(shown_enc, known_enc, known_users)
+        info = match(shown_enc[0], known_enc, known_users)
 
         if info[0] == 'Unknown':
             unknown_unmatched += 1

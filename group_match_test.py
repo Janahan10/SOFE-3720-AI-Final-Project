@@ -41,19 +41,16 @@ for i in range(num_tests):
         # find face in frame and get encodings
         print("Processing image...")
         face_locations, shown_enc = facial_detection(input_img)
-
-        # match the faces to known faces
-        print("Comparing faces...")
-        info = match(shown_enc, known_enc, known_users)
+        num_face_in_frame = len(shown_enc)
 
         # check if number of faces matched is equal to intended number
-        if num_faces == info[4]:
+        if num_faces == num_face_in_frame:
             # increment all_m counter
             all_m += 1
         else:
             # increment not_all_m counter
             not_all_m += 1
-            print("Given number of faces = %s" % info[4])
+            print("Given number of faces = %s" % num_face_in_frame)
             print("File name: " + img)
         
         print("Comparing done")

@@ -3,6 +3,7 @@ import os
 import re
 import cv2
 import numpy as np
+import imutils
 import face_recognition
 from encoding import read_known_user, get_image_encodings
 
@@ -64,11 +65,8 @@ def live_scan(known_enc, known_users):
         # Find faces in the frame and get encodings
         face_locations, shown_enc = facial_detection(rgb_frame)
 
-        # match the face to known faces
-        info = match(shown_enc, known_enc, known_users)
-
         # display the information
-        display(face_locations, info[0], info[1], info[2], info[3], frame, 1)
+        match_display(face_locations, shown_enc, known_enc, known_users, frame, 1)
 
         # Display the resulting image
         cv2.imshow('Live Scan', frame)
@@ -102,12 +100,9 @@ def scan_input(known_enc, known_users, input_path, input):
 
     # Continuous loop
     while cv2.getWindowProperty('Scanning Input Image', 0) >= 0:
-        
-        # match the face to known faces
-        info = match(shown_enc, known_enc, known_users)
 
         # display the information
-        display(face_locations, info[0], info[1], info[2], info[3], img, 1)
+        match_display(face_locations, shown_enc, known_enc, known_users, img, 1)
 
         # Display the resulting image
         cv2.imshow('Scanning Input Image', img)
@@ -116,6 +111,8 @@ def scan_input(known_enc, known_users, input_path, input):
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
     
+    output_path = "appdata/imgs/outputs/" + input 
+    cv2.imwrite(output_path, img)
     # close all windows
     cv2.destroyAllWindows()
 
@@ -126,43 +123,50 @@ def facial_detection(image):
 
     return coordinates, encodings
 
-def match(shown_enc, known_enc, known_users):
+def match(face_enc, known_enc, known_users):
 
     name = "Unknown"
     sex = "Unknown"
     occ = "Unknown"
     bday = "Unknown"
-    num_faces = len(shown_enc)
+    # num_faces = len(shown_enc)
 
     # check if list is empty
-    if len(shown_enc) != 0:
-        # compare all face encodings in img
-        for face_enc in shown_enc:
-            matches = face_recognition.compare_faces(known_enc, face_enc)
-            name = "Unknown"
-            sex = "Unknown"
-            occ = "Unknown"
-            bday = "Unknown"
+    # if len(shown_enc) != 0:
+    # compare all face encodings in img
+    # for face_enc in shown_enc:
+    matches = face_recognition.compare_faces(known_enc, face_enc)
+    name = "Unknown"
+    sex = "Unknown"
+    occ = "Unknown"
+    bday = "Unknown"
 
-            face_distances = face_recognition.face_distance(known_enc, face_enc)
-            best_match_index = np.argmin(face_distances)
-            if matches[best_match_index]:
-                name = known_users[best_match_index][0]
-                sex = known_users[best_match_index][1]
-                occ = known_users[best_match_index][2]
-                bday = known_users[best_match_index][3]
+    face_distances = face_recognition.face_distance(known_enc, face_enc)
+    best_match_index = np.argmin(face_distances)
+    if matches[best_match_index]:
+        name = known_users[best_match_index][0]
+        sex = known_users[best_match_index][1]
+        occ = known_users[best_match_index][2]
+        bday = known_users[best_match_index][3]
 
-            return [name, sex, occ, bday, num_faces]
+    return [name, sex, occ, bday]
 
-    else:
-        return [name, sex, occ, bday, num_faces]
+    # else:
+    #     return [name, sex, occ, bday, num_faces]
 
-def display(face_locations, name, sex, occ, bday, img, ratio):
+def match_display(face_locations, shown_enc, known_enc, known_users, img, ratio):
     
     # check if list is empty
-    if len(face_locations) != 0:
+    if len(face_locations) != 0 and len(shown_enc) != 0:
         # compare all face encodings in img
-        for (top, right, bottom, left) in face_locations:
+        for (top, right, bottom, left), face_enc in zip(face_locations, shown_enc):
+
+            # match the face to known faces
+            info = match(face_enc, known_enc, known_users)
+            name = info[0]
+            sex = info[1]
+            occ = info[2]
+            bday = info[3]
             
             left = int(left * ratio)
             right = int(right * ratio)

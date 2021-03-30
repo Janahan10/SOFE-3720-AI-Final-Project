@@ -6,7 +6,7 @@ import numpy as np
 import imutils
 import face_recognition
 from encoding import read_known_user, get_image_encodings
-from cam_scan import facial_detection, match, display
+from cam_scan import facial_detection, match_display
 import PySimpleGUI as sg
 
 def main():
@@ -113,12 +113,6 @@ def img_scan(img_path, known_enc, known_users):
     print("Processing image...")
     face_locations, shown_enc = facial_detection(input_img)
 
-    # match the face to known faces
-    print("Comparing faces...")
-    info = match(shown_enc, known_enc, known_users)
-
-    print("Comparing done")
-
     # display the information
     max_size = 500
     height = img.shape[0]
@@ -130,7 +124,7 @@ def img_scan(img_path, known_enc, known_users):
     else:
         resized_img = imutils.resize(img, width=max_size)
         img = resized_img
-    display(face_locations, info[0], info[1], info[2], info[3], img, ratio)
+    match_display(face_locations, shown_enc, known_enc, known_users, img, ratio)
 
     imgbytes = cv2.imencode(".png", img)[1].tobytes()
 
@@ -149,11 +143,8 @@ def live_scan(cap, known_enc, known_users):
     # Find faces in the frame and get encodings
     face_locations, shown_enc = facial_detection(rgb_frame)
 
-    # match the face to known faces
-    info = match(shown_enc, known_enc, known_users)
-
     # display the information
-    display(face_locations, info[0], info[1], info[2], info[3], frame, 1)
+    match_display(face_locations, shown_enc, known_enc, known_users, frame, 1)
 
     imgbytes = cv2.imencode(".png", frame)[1].tobytes()
     return imgbytes
