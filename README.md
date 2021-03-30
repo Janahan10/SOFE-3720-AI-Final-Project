@@ -1,6 +1,6 @@
 # Initial Setup
 
-- Install Python3 from [here](https://www.python.org/downloads/)\
+- Install Python3 from [here](https://www.python.org/downloads/)
 
 - Run command `git clone https://github.com/Janahan10/SOFE-3720-AI-Final-Project.git`\
 ![hippo](./Files-for-readme/4.gif)
