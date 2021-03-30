@@ -29,17 +29,11 @@ for i in range(num_tests):
     correct = 0
     incorrect = 0
 
-    # iterate through all users
-    # for i in range(len(known_users)):
-
     # iterate through all of the images in test directory
     for img in os.listdir(input_path):
 
         # load the input image
         print("Loading image...")
-        # read_img = cv2.imread(input_path + img, cv2.IMREAD_COLOR)
-        # resized_img = cv2.resize(read_img, (0, 0), fx=0.25, fy=0.25)     
-        # input_img = cv2.cvtColor(resized_img, cv2.COLOR_BGR2RGB)
         input_img = face_recognition.load_image_file(input_path + img)
         print("Image loaded")
 

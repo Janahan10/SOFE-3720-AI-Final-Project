@@ -11,16 +11,13 @@ from encoding import read_known_user, get_image_encodings
 def main():
     known_users_path = "appdata/imgs/users/"
     input_path = "appdata/imgs/inputs/"
-    # known_enc = []
     known_users = []
-    # known_files = []
-
-    # test image
-    # inp = "user-one.jpg"
 
     # train the faces
+    print("Training and encoding faces...")
     read_known_user(known_users)
     known_enc = get_image_encodings(known_users_path)
+    print("Finished encoding")
 
     # Ask user if they want a live scan or scan from an image
     choice = input("Would you like to scan live (type \"L\") or from an image (type \"I\")?: ")
@@ -129,12 +126,8 @@ def match(face_enc, known_enc, known_users):
     sex = "Unknown"
     occ = "Unknown"
     bday = "Unknown"
-    # num_faces = len(shown_enc)
-
-    # check if list is empty
-    # if len(shown_enc) != 0:
-    # compare all face encodings in img
-    # for face_enc in shown_enc:
+    
+    # compare our given encoding to our known ones
     matches = face_recognition.compare_faces(known_enc, face_enc)
     name = "Unknown"
     sex = "Unknown"
@@ -150,9 +143,6 @@ def match(face_enc, known_enc, known_users):
         bday = known_users[best_match_index][3]
 
     return [name, sex, occ, bday]
-
-    # else:
-    #     return [name, sex, occ, bday, num_faces]
 
 def match_display(face_locations, shown_enc, known_enc, known_users, img, ratio):
     
