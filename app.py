@@ -33,7 +33,10 @@ def main():
                 values=[], enable_events=True, size=(40, 20), key="-FILE LIST-"
             )
         ],
-        [sg.Button("Exit", size=(10, 1))]
+        [
+            sg.Button("Save selected image", size=(15, 1)),
+            sg.Button("Exit", size=(10, 1))
+        ]
     ]
 
     # For now will only show the name of the file that was chosen
@@ -68,7 +71,7 @@ def main():
             imgbytes = live_scan(cap, known_enc, known_users)
             window["-IMAGE-"].update(data=imgbytes)
         elif event == "-FILE LIST-":  # A file was chosen from the listbox
-
+            
             try:
                 img_path = os.path.join(
                     values["-FOLDER-"], values["-FILE LIST-"][0]
@@ -76,8 +79,9 @@ def main():
 
             except:
                 pass
-
-            imgbytes = img_scan(img_path, known_enc, known_users)
+            
+            output_path = "appdata/imgs/outputs/" + values["-FILE LIST-"][0]
+            imgbytes, img = img_scan(img_path, known_enc, known_users)
             window["-IMAGE-"].update(data=imgbytes)
 
         if event == "-FOLDER-":
@@ -99,6 +103,12 @@ def main():
                 and f.lower().endswith((".png", ".gif", ".jpg"))
             ]
             window["-FILE LIST-"].update(fnames)
+        
+        if event == "Save":
+
+            # Save the image in the output folder if image selected
+            if output_path and img.any():
+                cv2.imwrite(output_path, img)
 
     window.close()
 
@@ -128,7 +138,7 @@ def img_scan(img_path, known_enc, known_users):
 
     imgbytes = cv2.imencode(".png", img)[1].tobytes()
 
-    return imgbytes
+    return imgbytes, img
 
 def live_scan(cap, known_enc, known_users):
 
