@@ -81,6 +81,7 @@ def main():
                 pass
             
             output_path = "appdata/imgs/outputs/" + values["-FILE LIST-"][0]
+            print(output_path)
             imgbytes, img = img_scan(img_path, known_enc, known_users)
             window["-IMAGE-"].update(data=imgbytes)
 
@@ -104,7 +105,7 @@ def main():
             ]
             window["-FILE LIST-"].update(fnames)
         
-        if event == "Save":
+        if event == "Save selected image":
 
             # Save the image in the output folder if image selected
             if output_path and img.any():
